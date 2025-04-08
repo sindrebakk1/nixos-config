@@ -5,7 +5,10 @@
 { config, pkgs, inputs, ... }:
 
 {
-  imports = [ ./hardware-configuration.nix ];
+  imports = [
+    ./hardware-configuration.nix
+    (import "${inputs.home-manager}/nixos")
+  ];
   
   nix.settings = {
     experimental-features = [ "nix-command" "flakes" ];
