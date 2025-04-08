@@ -13,6 +13,9 @@
       specialArgs = { inherit inputs; };
       modules = [
         ./configuration.nix
+	./system.nix
+	./hyprland.nix
+	./audio.nix
       ];
     };
   };
