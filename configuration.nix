@@ -92,6 +92,7 @@ in
      vim
      wget
      git
+     gh
      kitty
      nemo
   ];
