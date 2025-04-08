@@ -2,18 +2,17 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
-let
-  home-manager = builtins.fetchTarball https://github.com/nix-community/home-manager/archive/release-24.11.tar.gz;
-in
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      (import "${home-manager}/nixos")
-    ];
-
+  imports = [ ./hardware-configuration.nix ];
+  
+  nix.settings = {
+    experimental-features = [ "nix-command" "flakes" ];
+    substituters = ["https://hyprland.cachix.org"];
+    trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
+  };
+  
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -33,7 +32,7 @@ in
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
-
+  
   # Disable X11.
   services.xserver.enable = false;
 
@@ -42,10 +41,15 @@ in
   # Enable the GNOME Desktop Environment.
   services.xserver.desktopManager.gnome.enable = true;
 
+  # Hyprland, hypridle and hyprlock
   services.hypridle.enable = true;
   
-  programs.hyprland.enable = true;
-
+  programs.hyprland = {
+    enable = true;
+    package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+    portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+  };
+  
   programs.hyprlock.enable = true;
 
   # Configure console keymap
@@ -69,9 +73,6 @@ in
     # no need to redefine it in your config for now)
     #media-session.enable = true;
   };
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.sindreb = {
@@ -117,7 +118,6 @@ in
     enable = true;
     config = {
       init.defaultBranch = "main";
-      safe.directory = "/etc/nixos";
       user.name = "sindrebakk1";
       user.email = "sindre.bakken.naesset@gmail.com";
     };
@@ -126,57 +126,6 @@ in
   fonts.packages = with pkgs; [
     (nerdfonts.override { fonts = [ "RobotoMono" "DroidSansMono" ]; })
   ];
-  
-  # Home manager
-  home-manager.users.sindreb = {
-    home.packages = with pkgs; [
-      lazygit
-      ghostty
-    ];
-    
-    programs.git = {
-      userName = "sindrebakk1";
-      userEmail = "sindre.bakken.naesset@gmail.com";
-    };
-    
-    programs.neovim = {
-      enable = true;
-      defaultEditor = true;
-      viAlias = true;
-    };
-
-    programs.waybar.enable = true;
-    wayland.windowManager.hyprland.enable = true;
-    wayland.windowManager.hyprland.settings = {
-      "$terminal" = "ghostty";
-      "$fileBrowser" = "nemo";
-      "$mod" = "SUPER";
-      exec-once = [
-	"$terminal"
-	"waybar & hyprpaper &"
-      ];
-      bind = [
-        "$mod, F, exec, firefox"
-	"$mod, E, exec, $fileBrowser"
-	"$mod, T, exec, $terminal"
-      ] ++ (
-        builtins.concatLists (builtins.genList (i:
-	  let ws = i + 1;
-	  in [
-	    "$mod, code:1${toString i}, workspace, ${toString ws}"
-	    "$mod SHIFT, code:1${toString i}, movetoworkspace, ${toString ws}"
-	  ]
-	)
-	9)
-      );
-    };
-
-    home.sessionVariables.NIXOS_OZONE_WL = "1";
-
-    programs.nnn.enable = true;
-    
-    home.stateVersion = "24.11";
-  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
