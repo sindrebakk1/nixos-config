@@ -126,8 +126,9 @@
     };
   };
   
-  fonts.packages = with pkgs; [
-    (nerdfonts.override { fonts = [ "RobotoMono" "DroidSansMono" ]; })
+  fonts.packages = with pkgs.nerd-fonts; [
+    roboto-mono
+    droid-sans-mono
   ];
 
   home-manager.users.sindreb = {
