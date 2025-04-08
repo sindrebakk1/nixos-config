@@ -17,7 +17,7 @@
 	{
 	  home-manager.useGlobalPkgs = true;
 	  home-manager.useUserPackages = true;
-	  home-manager.user.sindreb = ./home.nix;
+	  home-manager.users.sindreb = ./home.nix;
 	}
       ];
     };
