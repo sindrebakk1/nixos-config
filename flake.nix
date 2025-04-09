@@ -67,7 +67,7 @@
     nixosConfigurations = {
       think-pad = nixpkgs.lib.nixosSystem {
         specialArgs = {
-	  inherit inputs outputs;
+	  inherit inputs;
 	};
         modules = sharedModules ++ [ ./hosts/think-pad ];
       };
