@@ -7,7 +7,6 @@
   options.settings.graphical.applications.firefox.enable = lib.mkEnableOption "firefox";
 
   config = lib.mkIf config.settings.graphical.applications.firefox.enable {
-    config.stylix.targets.firefox.profileNames = [ "sindreb" ];
     home-manager.users.sindreb = {...}: {
       programs.firefox = {
         enable = true;
