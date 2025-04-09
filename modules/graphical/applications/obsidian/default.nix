@@ -4,9 +4,9 @@
   pkgs,
   ...
 }: {
-  options.dc-tec.graphical.applications.obsidian.enable = lib.mkEnableOption "obsidian";
+  options.settings.graphical.applications.obsidian.enable = lib.mkEnableOption "obsidian";
 
-  config = lib.mkIf config.dc-tec.graphical.applications.obsidian.enable {
+  config = lib.mkIf config.settings.graphical.applications.obsidian.enable {
     environment.systemPackages = with pkgs; [
       obsidian
     ];

@@ -5,7 +5,7 @@
   ...
 }:
 {
-  options.dc-tec.graphical.theme = {
+  options.settings.graphical.theme = {
     enable = lib.mkOption {
       default = true;
     };

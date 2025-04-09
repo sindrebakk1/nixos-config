@@ -4,9 +4,9 @@
   pkgs,
   ...
 }: {
-  options.dc-tec.graphical.xdg.enable = lib.mkEnableOption "xdg folders";
+  options.settings.graphical.xdg.enable = lib.mkEnableOption "xdg folders";
 
-  config = lib.mkIf config.dc-tec.graphical.xdg.enable {
+  config = lib.mkIf config.settings.graphical.xdg.enable {
     xdg = {
       portal = {
         enable = true;

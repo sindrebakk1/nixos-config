@@ -18,7 +18,7 @@
   };
 
   config = lib.mkIf config.settings.graphical.enable {
-    dc-tec = {
+    settings = {
       graphical = {
         hyprland.enable = lib.mkDefault true;
         hyprlock.enable = lib.mkDefault true;
