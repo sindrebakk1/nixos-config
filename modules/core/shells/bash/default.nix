@@ -3,7 +3,6 @@ _: {
 
   home-manager.users.sindreb = {
     programs.bash = {
-      enable = true;
       enableCompletion = true;
       sessionVariables = {
         DEFAULT_USER = "sindreb";
