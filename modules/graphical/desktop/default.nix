@@ -3,7 +3,6 @@ _: {
     ./fuzzel
     ./hyprland
     ./hyprpaper
-    ./hyprlock
     ./wlogout
     ./swaync
   ];
