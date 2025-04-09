@@ -15,6 +15,8 @@
       modules = [
         ./configuration.nix
 	./hardware-configuration.nix
+	./users.nix
+	./home.nix
 	./audio.nix
 	./hyprland.nix
       ];
