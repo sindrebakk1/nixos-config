@@ -69,7 +69,7 @@
         specialArgs = {
 	  inherit inputs;
 	};
-        modules = sharedModules ++ [ ./hosts/think-pad ];
+        modules = sharedModules ++ [ ./hosts/think-pad/default.nix ];
       };
     };
   };
