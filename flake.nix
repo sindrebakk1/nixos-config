@@ -47,7 +47,7 @@
     ];
 
     sharedModules = [
-      home-manager.nixosModules
+      home-manager.nixosModules.home-manager
       sops-nix.nixosModules.sops
       stylix.nixosModules.stylix
 
