@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nur.url = "github:nix-community/NUR"; 
     
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -35,6 +36,7 @@
   outputs = {
     self,
     nixpkgs,
+    nur,
     home-manager,
     sops-nix,
     stylix,
@@ -47,6 +49,7 @@
     ];
 
     sharedModules = [
+      nur.nixosModules.nur
       home-manager.nixosModules.home-manager
       sops-nix.nixosModules.sops
       stylix.nixosModules.stylix
