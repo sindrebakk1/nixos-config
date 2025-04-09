@@ -5,7 +5,7 @@ _: {
     hostName = "think-pad";
   };
 
-  config = {
+  settings = {
     stateVersion = "24.11";
     core = {
       wireless = {
