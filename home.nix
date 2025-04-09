@@ -36,9 +36,9 @@
       ];
       bind = [
         "$mod, F, exec, firefox"
-	"$mod, E, exec, $fileBrowser"
+	"$mod, E, exec, $terminal $fileBrowser"
 	"$mod, T, exec, $terminal"
-	"$mod, G, exec, lazygit"
+	"$mod, G, exec, $terminal lazygit"
       ] ++ (
         builtins.concatLists (builtins.genList (i:
 	  let ws = i + 1;
