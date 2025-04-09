@@ -1,0 +1,7 @@
+keys:
+  - &sindreb age1zcneu5ruq94rfg5nvcdkw6a8f70dxf7t064s738unedphf6tj3wsu58u85 
+creation_rules:
+  - path_regex: secrets/secrets.yaml$
+    key_groups:
+      - age:
+          - *sindreb

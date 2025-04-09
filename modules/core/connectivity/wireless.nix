@@ -6,8 +6,8 @@
       enable = true;
       secretsFile = config.sops.secrets.wireless.path;
       networks = {
-        "@home_5G_uuid@" = {pskRaw = "ext:home_psk";};
-        "@home_uuid@" = {pskRaw = "ext:home_psk";};
+        "Big_Birb_5G" = {pskRaw = "ext:home_psk";};
+        "Big_Birb" = {pskRaw = "ext:home_psk";};
       };
     };
   };

@@ -5,9 +5,6 @@ _: {
 
     age = {
       keyFile = "/home/sindreb/.config/sops/age/keys.txt";
-      sshKeyPaths = [
-        "/data/etc/ssh/ssh_host_ed25519_key"
-      ];
       generateKey = true;
     };
 
@@ -21,15 +18,6 @@ _: {
       };
 
       wireless = {};
-
-      "authorized_keys/root" = {
-        path = "/root/.ssh/authorized_keys";
-      };
-
-      "authorized_keys/sindreb" = {
-        path = "/home/sindreb/.ssh/authorized_keys";
-        owner = "sindreb";
-      };
     };
   };
 }
