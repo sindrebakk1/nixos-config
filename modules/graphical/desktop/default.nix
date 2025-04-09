@@ -4,6 +4,7 @@ _: {
     ./hyprland
     ./hyprpaper
     ./wlogout
+    ./waybar
     ./swaync
   ];
 }
