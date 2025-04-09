@@ -5,67 +5,89 @@
 { config, pkgs, inputs, ... }:
 
 {
-  imports = [
-    ./hardware-configuration.nix
-    (import "${inputs.home-manager}/nixos")
-  ];
-  
   nix.settings = {
     experimental-features = [ "nix-command" "flakes" ];
     substituters = ["https://hyprland.cachix.org"];
     trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
   };
   
-  home-manager.users.sindreb = {
-    home.packages = with pkgs; [
-      lazygit
-      ghostty
-    ];
-    
-    programs.git = {
-      userName = "sindrebakk1";
-      userEmail = "sindre.bakken.naesset@gmail.com";
-    };
-    
-    programs.neovim = {
-      enable = true;
-      defaultEditor = true;
-      viAlias = true;
-    };
+  # Set your time zone.
+  time.timeZone = "Europe/Oslo";
 
-    programs.waybar.enable = true;
-    wayland.windowManager.hyprland.enable = true;
-    wayland.windowManager.hyprland.settings = {
-      "$terminal" = "ghostty";
-      "$fileBrowser" = "nemo";
-      "$mod" = "SUPER";
-      exec-once = [
-	"$terminal"
-	"waybar & hyprpaper &"
-      ];
-      bind = [
-        "$mod, F, exec, firefox"
-	"$mod, E, exec, $fileBrowser"
-	"$mod, T, exec, $terminal"
-      ] ++ (
-        builtins.concatLists (builtins.genList (i:
-	  let ws = i + 1;
-	  in [
-	    "$mod, code:1${toString i}, workspace, ${toString ws}"
-	    "$mod SHIFT, code:1${toString i}, movetoworkspace, ${toString ws}"
-	  ]
-	)
-	9)
-      );
+  # Select internationalisation properties.
+  i18n.defaultLocale = "en_US.UTF-8";
+  
+  # Configure console keymap
+  console.keyMap = "us";
+  
+  networking.hostName = "nixos"; # Define your hostname.
+  
+  # Disable X11.
+  services.xserver.enable = false;
+
+  services.displayManager.ly.enable = true;
+   
+  # Enable the GNOME Desktop Environment.
+  services.xserver.desktopManager.gnome.enable = true;
+
+  environment.gnome.excludePackages = (with pkgs; [
+    gnome-photos
+    gnome-tour
+    cheese
+    gnome-music
+    gnome-terminal
+    epiphany
+    geary
+    gnome-characters
+    totem
+    tali
+    iagno
+    hitori
+    atomix
+  ]);
+
+  # Bootloader.
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+
+  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+
+  # Configure network proxy if necessary
+  # networking.proxy.default = "http://user:password@proxy:port/";
+  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+
+  # Enable networking
+  networking.networkmanager.enable = true;
+
+  # Install firefox.
+  programs.firefox.enable = true;
+
+  # Allow unfree packages
+  nixpkgs.config.allowUnfree = true;
+
+  # List packages installed in system profile. To search, run:
+  # $ nix search wget
+  environment.systemPackages = with pkgs; [
+     vim
+     wget
+     gh
+     kitty
+     nemo
+  ];
+
+  programs.git = {
+    enable = true;
+    config = {
+      init.defaultBranch = "main";
     };
-
-    home.sessionVariables.NIXOS_OZONE_WL = "1";
-
-    programs.nnn.enable = true;
-    
-    home.stateVersion = "24.11";
   };
+  
+  fonts.packages = with pkgs.nerd-fonts; [
+    roboto-mono
+    droid-sans-mono
+  ];
 
+ 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
