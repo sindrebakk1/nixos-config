@@ -19,20 +19,26 @@
       defaultEditor = true;
       viAlias = true;
     };
+    
+    programs.nnn.enable = true;
 
     programs.waybar.enable = true;
+    
     wayland.windowManager.hyprland.enable = true;
+    wayland.windowManager.hyprland.package = null;
+    wayland.windowManager.hyprland.portalPackage = null;
     wayland.windowManager.hyprland.settings = {
       "$terminal" = "ghostty";
-      "$fileBrowser" = "nemo";
+      "$fileBrowser" = "nnn";
       "$mod" = "SUPER";
       exec-once = [
-	"$terminal"
 	"waybar & hyprpaper &"
       ];
       bind = [
         "$mod, F, exec, firefox"
 	"$mod, E, exec, $fileBrowser"
+	"$mod, T, exec, $terminal"
+	"$mod, G, exec, lazygit"
       ] ++ (
         builtins.concatLists (builtins.genList (i:
 	  let ws = i + 1;
@@ -47,8 +53,6 @@
 
     home.sessionVariables.NIXOS_OZONE_WL = "1";
 
-    programs.nnn.enable = true;
-    
     home.stateVersion = "24.11";
   };
 }

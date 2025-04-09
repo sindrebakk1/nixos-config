@@ -17,7 +17,7 @@
 	./hardware-configuration.nix
 	./users.nix
 	./home.nix
-	./audio.nix
+	./services/audio.nix
 	./hyprland.nix
       ];
     };
