@@ -33,7 +33,6 @@
       bind = [
         "$mod, F, exec, firefox"
 	"$mod, E, exec, $fileBrowser"
-	"$mod, T, exec, $terminal"
       ] ++ (
         builtins.concatLists (builtins.genList (i:
 	  let ws = i + 1;
