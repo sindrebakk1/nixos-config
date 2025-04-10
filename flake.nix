@@ -27,10 +27,20 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    stylix = {
-      url = "github:danth/stylix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    stylix.url = "github:danth/stylix";
+
+    yazi.url = "github:sxyazi/yazi";
+  };
+
+  nixConfig = {
+    extra-substituters = [
+      "https://hyprland.cachix.org"
+      "https://yazi.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+      "yazi.cachix.org-1:Dcdz63NZKfvUCbDGngQDAZq6kOroIrFoyO064uvLh8k="
+    ];
   };
 
   outputs = {
@@ -40,12 +50,13 @@
     home-manager,
     sops-nix,
     stylix,
+    yazi,
     ... 
   }@inputs:
   let
     inherit (self) ouputs;
     forAllSystems = nixpkgs.lib.genAttrs [
-      "x86_64-linux"
+      builtins.currentSystem
     ];
 
     sharedModules = [
@@ -56,7 +67,10 @@
 
       ./modules
     ];
-      
+
+    overlays = [
+      yazi.overlays.default
+    ];
   in
   {
     formatter = forAllSystems (
@@ -73,6 +87,7 @@
 	  inherit inputs;
 	};
         modules = sharedModules ++ [ ./hosts/think-pad/default.nix ];
+	pkgs = overlays;
       };
     };
   };

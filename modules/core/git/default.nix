@@ -6,7 +6,6 @@
 }:
 {
   imports = [
-    ./lazygit.nix
     ./github.nix
   ];
 

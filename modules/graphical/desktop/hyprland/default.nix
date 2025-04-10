@@ -16,11 +16,6 @@
       grim
     ];
 
-    nix.settings = {
-      substituters = ["https://hyprland.cachix.org"];
-      trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
-    };
-
     services = {
       displayManager = {
         sddm = {
@@ -168,10 +163,6 @@
             "$mod SHIFT, q, killactive"
             "$mod SHIFT, e, exit"
             "$mod SHIFT, l, exec, ${pkgs.hyprlock}/bin/hyprlock"
-
-	    # NixOS bookmarks
-	    "$mod ALT, o, exec, firefox https://search.nixos.org/options"
-	    "$mod ALT, p, exec, firefox https://search.nixos.org/packages"
 
             # Screen focus
             "$mod, v, togglefloating"

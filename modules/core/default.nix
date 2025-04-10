@@ -7,5 +7,7 @@ _: {
     ./home-manager
     ./system
     ./users
+    ./tui
+    ./utils
   ];
 }
