@@ -6,7 +6,7 @@ _: {
       baseIndex = 1;
       clock24 = true;
       historyLimit = 100000;
-      prefix = "C-a";
+      shortcut = "a";
     };
   };
 }
