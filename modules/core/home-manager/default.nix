@@ -12,12 +12,12 @@
 
     users = {
       sindreb = _: {
+        programs.neovim = {
+          enable = true;
+          defaultEditor = true;
+        };
         home = {
           stateVersion = config.settings.stateVersion;
-          programs.neovim = {
-            enable = true;
-            defaultEditor = true;
-          };
         };
         systemd.user.sessionVariables = config.home-manager.users.sindreb.home.sessionVariables;
       };
