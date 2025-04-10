@@ -8,8 +8,8 @@
           command_timeout = 1000;
           character = {
 	    disabled = false;
-            success_symbol = "[󱄅 ❯](bold fg:green)";
-            error_symbol = "[󱄅 ❯](bold fg:red)";
+            success_symbol = "[❯](bold fg:green)";
+            error_symbol = "[❯](bold fg:red)";
 	  };
 
           format = lib.concatStrings [
