@@ -2,7 +2,7 @@ _: {
   config = {
     programs.tmux = {
       enable = true;
-      keymode = "vi";
+      keyMode = "vi";
       baseIndex = 1;
       clock24 = true;
       historyLimit = 100000;
