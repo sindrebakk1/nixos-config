@@ -83,8 +83,8 @@
         LC_TIME = "en_GB.UTF-8";
       };
       supportedLocales = [
-        "nb_NO.UTF-8/UTF-8"
         "en_US.UTF-8/UTF-8"
+        "nb_NO.UTF-8/UTF-8"
       ];
     };
   };

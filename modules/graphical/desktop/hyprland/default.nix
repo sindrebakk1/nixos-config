@@ -16,6 +16,11 @@
       grim
     ];
 
+    nix.settings = {
+      substituters = ["https://hyprland.cachix.org"];
+      trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
+    };
+
     services = {
       displayManager = {
         sddm = {
@@ -56,7 +61,7 @@
 
         settings = {
           "$terminal" = "ghostty";
-	  "$fileWatcher" = ""
+	  "$fileManager" = "ghostty -e yazi";
           "$mod" = "SUPER";
 
           monitor = [
@@ -160,6 +165,7 @@
           bind = [
             # General
             "$mod, return, exec, $terminal"
+            "$mod, return, exec, $fileManager"
             "$mod SHIFT, q, killactive"
             "$mod SHIFT, e, exit"
             "$mod SHIFT, l, exec, ${pkgs.hyprlock}/bin/hyprlock"
