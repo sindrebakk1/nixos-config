@@ -22,9 +22,6 @@
     };
 
     services = {
-      xserver = {
-        videoDrivers = ["nvidia"];
-      };
       displayManager = {
         sddm = {
           enable = true;
