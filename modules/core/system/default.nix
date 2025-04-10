@@ -88,11 +88,10 @@
       ];
     };
 
-    services.xserver = {
-      enable = true;
+    services.xserver.xkb = {
       layout = "us";
-      xkbOptions = "grp:super_space_toggle";
-      xkbVariant = "us,nb";
+      options = "grp:win_space_toggle";
+      variant = "us,nb";
     };
   };
 }
