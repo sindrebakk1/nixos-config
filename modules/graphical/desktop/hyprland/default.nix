@@ -61,6 +61,7 @@
 
         settings = {
           "$terminal" = "ghostty";
+	  "$fileWatcher" = ""
           "$mod" = "SUPER";
 
           monitor = [
@@ -168,6 +169,10 @@
             "$mod SHIFT, e, exit"
             "$mod SHIFT, l, exec, ${pkgs.hyprlock}/bin/hyprlock"
 
+	    # NixOS bookmarks
+	    "$mod ALT, o, exec, firefox https://search.nixos.org/options"
+	    "$mod ALT, p, exec, firefox https://search.nixos.org/packages"
+
             # Screen focus
             "$mod, v, togglefloating"
             "$mod, u, focusurgentorlast"
@@ -192,7 +197,7 @@
             "$mod, 9, workspace, 9"
             "$mod, 0, workspace, 10"
 
-            # Move to workspaces
+            # Move to workspaces::
             "$mod SHIFT, 1, movetoworkspace,1"
             "$mod SHIFT, 2, movetoworkspace,2"
             "$mod SHIFT, 3, movetoworkspace,3"
