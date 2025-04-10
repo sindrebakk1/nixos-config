@@ -60,16 +60,25 @@
     ];
 
     sharedModules = [
+      ({
+	inputs,
+	outputs,
+	lib,
+	config,
+	pkgs,
+	...
+      }: {
+	nixpkgs.overlays = [
+	  yazi.overlays.default
+	];
+      })
+      
       nur.modules.nixos.default
       home-manager.nixosModules.home-manager
       sops-nix.nixosModules.sops
       stylix.nixosModules.stylix
 
       ./modules
-    ];
-
-    overlays = [
-      yazi.overlays.default
     ];
   in
   {
@@ -81,13 +90,16 @@
       pkgs.nixpkgs-fmt
     );
 
+    overlays = [
+      yazi.overlays.default
+    ];
+
     nixosConfigurations = {
       think-pad = nixpkgs.lib.nixosSystem {
         specialArgs = {
 	  inherit inputs;
 	};
         modules = sharedModules ++ [ ./hosts/think-pad/default.nix ];
-	pkgs = overlays;
       };
     };
   };
