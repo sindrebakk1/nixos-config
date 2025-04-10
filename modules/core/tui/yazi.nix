@@ -1,7 +1,7 @@
 _: {
   config = {
     home-manager.users.sindreb = {
-      progrmas.yazi = {
+      programs.yazi = {
         enable = true;
 	enableBashIntegration = true;
 	settings = {
