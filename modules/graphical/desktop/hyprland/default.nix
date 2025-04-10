@@ -165,10 +165,13 @@
           bind = [
             # General
             "$mod, return, exec, $terminal"
-            "$mod, return, exec, $fileManager"
+            "$mod, e, exec, $fileManager"
             "$mod SHIFT, q, killactive"
             "$mod SHIFT, e, exit"
             "$mod SHIFT, l, exec, ${pkgs.hyprlock}/bin/hyprlock"
+
+	    "mod ALT, o, exec, firefox https://search.nixos.org/options"
+	    "mod ALT, p, exec, firefox https://search.nixos.org/packages"
 
             # Screen focus
             "$mod, v, togglefloating"
