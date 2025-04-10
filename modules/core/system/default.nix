@@ -87,5 +87,12 @@
         "nb_NO.UTF-8/UTF-8"
       ];
     };
+
+    services.xserver = {
+      enable = true;
+      layout = "us";
+      xkbOptions = "grp:super_space_toggle";
+      xkbVariant = "us,nb";
+    };
   };
 }
