@@ -8,6 +8,7 @@
 
   config = lib.mkIf config.settings.graphical.applications.firefox.enable {
     home-manager.users.sindreb = {...}: {
+      stylix.targets.firefox.profileNames = ["sindreb"];
       programs.firefox = {
         enable = true;
         profiles.sindreb = {

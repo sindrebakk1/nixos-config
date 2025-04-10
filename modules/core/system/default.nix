@@ -48,6 +48,7 @@
         openssl
         tcpdump
         bridge-utils
+        vi
       ];
     };
 
