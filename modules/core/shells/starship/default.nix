@@ -8,20 +8,20 @@
           command_timeout = 1000;
           character = {
 	    disabled = false;
-            success_symbol = "[󱄅 ❯](bold fg:color_green)";
-            error_symbol = "[󱄅 ❯](bold fg:color_red)";
+            success_symbol = "[󱄅 ❯](bold fg:green)";
+            error_symbol = "[󱄅 ❯](bold fg:red)";
 	  };
 
           format = lib.concatStrings [
-	    "[](color_orange)"
+	    "[](orange)"
 	    "$os"
 	    "$username"
-	    "[](bg:color_yellow fg:color_orange)"
+	    "[](bg:yellow fg:orange)"
 	    "$directory"
-	    "[](fg:color_yellow bg:color_aqua)"
+	    "[](fg:yellow bg:cyan)"
 	    "$git_branch"
 	    "$git_status"
-	    "[](fg:color_aqua bg:color_blue)"
+	    "[](fg:cyan bg:blue)"
 	    "$c"
 	    "$rust"
 	    "$golang"
@@ -31,18 +31,18 @@
 	    "$kotlin"
 	    "$haskell"
 	    "$python"
-	    "[](fg:color_blue bg:color_bg3)"
+	    "[](fg:blue bg:base02)"
 	    "$docker_context"
 	    "$conda"
-	    "[](fg:color_bg3 bg:color_bg1)"
+	    "[](fg:base02 bg:base01)"
 	    "$time"
-	    "[ ](fg:color_bg1)"
+	    "[ ](fg:base01)"
 	    "$line_break$character"
           ];
 	 
 	  os = {
 	    disabled = false;
-	    style = "bg:color_orange fg:color_fg0";
+	    style = "bg:orange fg:bright-white";
 	  };
 
 	  os.symbols = {
@@ -72,13 +72,13 @@
 	  
 	  username = { 
 	    show_always = true;
-	    style_user = "bg:color_orange fg:color_fg0";
-	    style_root = "bg:color_orange fg:color_fg0";
+	    style_user = "bg:orange fg:bright-white";
+	    style_root = "bg:orange fg:bright-white";
 	    format = "[ $user ]($style)";
 	  };
 
 	  directory = {
-	    style = "fg:color_fg0 bg:color_yellow";
+	    style = "fg:bright-white bg:yellow";
 	    format = "[ $path ]($style)";
 	    truncation_length = 3;
 	    truncation_symbol = "…/";
@@ -94,85 +94,85 @@
 
 	  git_branch = {
 	    symbol = "";
-	    style = "bg:color_aqua";
-	    format = "[[ $symbol $branch ](fg:color_fg0 bg:color_aqua)]($style)";
+	    style = "bg:cyan";
+	    format = "[[ $symbol $branch ](fg:bright-white bg:cyan)]($style)";
 	  };
 
 	  git_status = {
-	    style = "bg:color_aqua";
-	    format = "[[($all_status$ahead_behind )](fg:color_fg0 bg:color_aqua)]($style)";
+	    style = "bg:cyan";
+	    format = "[[($all_status$ahead_behind )](fg:bright-white bg:cyan)]($style)";
 	  };
 
 	  nodejs = {
 	    symbol = "";
-	    style = "bg:color_blue";
-	    format = "[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)";
+	    style = "bg:blue";
+	    format = "[[ $symbol( $version) ](fg:bright-white bg:blue)]($style)";
 	  };
 
 	  c = {
 	    symbol = " ";
-	    style = "bg:color_blue";
-	    format = "[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)";
+	    style = "bg:blue";
+	    format = "[[ $symbol( $version) ](fg:bright-white bg:blue)]($style)";
 	  };
 
 	  rust = {
 	    symbol = "";
-	    style = "bg:color_blue";
-	    format = "[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)";
+	    style = "bg:blue";
+	    format = "[[ $symbol( $version) ](fg:bright-white bg:blue)]($style)";
 	  };
 
 	  golang = {
 	    symbol = "";
-	    style = "bg:color_blue";
-	    format = "[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)";
+	    style = "bg:blue";
+	    format = "[[ $symbol( $version) ](fg:bright-white bg:blue)]($style)";
 	  };
 
 	  php = {
 	    symbol = "";
-	    style = "bg:color_blue";
-	    format = "[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)";
+	    style = "bg:blue";
+	    format = "[[ $symbol( $version) ](fg:bright-white bg:blue)]($style)";
 	  };
 
 	  java = {
 	    symbol = "";
-	    style = "bg:color_blue";
-	    format = "[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)";
+	    style = "bg:blue";
+	    format = "[[ $symbol( $version) ](fg:bright-white bg:blue)]($style)";
 	  };
 
 	  kotlin = {
 	    symbol = "";
-	    style = "bg:color_blue";
-	    format = "[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)";
+	    style = "bg:blue";
+	    format = "[[ $symbol( $version) ](fg:bright-white bg:blue)]($style)";
 	  };
 
 	  haskell = {
 	    symbol = "";
-	    style = "bg:color_blue";
-	    format = "[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)";
+	    style = "bg:blue";
+	    format = "[[ $symbol( $version) ](fg:bright-white bg:blue)]($style)";
 	  };
 
 	  python = {
 	    symbol = "";
-	    style = "bg:color_blue";
-	    format = "[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)";
+	    style = "bg:blue";
+	    format = "[[ $symbol( $version) ](fg:bright-white bg:blue)]($style)";
 	  };
 
 	  docker_context = {
 	    symbol = "";
-	    style = "bg:color_bg3";
-	    format = "[[ $symbol( $context) ](fg:#83a598 bg:color_bg3)]($style)";
+	    style = "bg:base02";
+	    format = "[[ $symbol( $context) ](fg:#83a598 bg:base02)]($style)";
 	  };
 
 	  conda = {
-	    style = "bg:color_bg3";
-	    format = "[[ $symbol( $environment) ](fg:#83a598 bg:color_bg3)]($style)";
+	    style = "bg:base02";
+	    format = "[[ $symbol( $environment) ](fg:#83a598 bg:base02)]($style)";
 	  };
 
 	  time = {
 	    disabled = false;
 	    time_format = "%R";
-	    style = "bg:color_bg1";
-	    format = "[[  $time ](fg:color_fg0 bg:color_bg1)]($style)";
+	    style = "bg:base01";
+	    format = "[[  $time ](fg:bright-white bg:base01)]($style)";
 	  };
 
 	  line_break = {
