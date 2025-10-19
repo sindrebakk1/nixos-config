@@ -20,8 +20,17 @@
   environment.systemPackages = with pkgs; [
     curl
     wget
+    ripgrep
     fastfetchMinimal
   ];
+
+  services.openssh = {
+    enable = true;
+    settings = {
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+    };
+  };
 
   systemd.tmpfiles.rules = [
     "d /mnt/d/wsl-home 0755 root root -"

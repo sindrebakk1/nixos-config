@@ -34,5 +34,9 @@ in
 
     security.sudo.wheelNeedsPassword =
       if cfg.disablePassword then lib.mkForce false else cfg.sudoWheelNeedsPassword;
+
+    time.timeZone = "Europe/Oslo";
+    i18n.defaultLocale = "en_US.UTF-8";
+    i18n.supportedLocales = [ "en_US.UTF-8/UTF-8" ];
   };
 }
