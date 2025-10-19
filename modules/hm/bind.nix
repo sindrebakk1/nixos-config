@@ -1,14 +1,16 @@
-{ config, ... }:
-let u = config.profile.username;
+{ lib, config, ... }:
+let
+  u   = config.profile.username;
+  cfg = config.profile.homeManager;
 in
-{
+lib.mkIf config.profile.homeManager.enable {
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
     users.${u} = {
       home.username      = u;
-      home.homeDirectory = config.profile.homeDir;
-      home.stateVersion  = config.profile.hmStateVersion;
+      home.homeDirectory = cfg.homeDir;
+      home.stateVersion  = cfg.stateVersion;
     };
   };
 }

@@ -2,15 +2,17 @@
 let
   u   = config.profile.username;
   cfg = config.profile.userAuth;
-  secretKey = cfg.secretKey;
+  pwKey  = cfg.secretKeys.passwordHash;
+  pwPath = config.sops.secrets.${pwKey}.path;
 in
 {
   config = {
     users.mutableUsers = false;
     users.allowNoPasswordLogin = lib.mkForce cfg.disablePassword;
 
-    sops.secrets.${secretKey} = lib.mkIf (!cfg.disablePassword) {
+    sops.secrets.${pwKey} = lib.mkIf (!cfg.disablePassword) {
       neededForUsers = true;
+      sopsFile = cfg.sopsFile;
     };
 
     users.users.${u} = lib.mkMerge [
@@ -26,7 +28,7 @@ in
       })
 
       (lib.mkIf (!cfg.disablePassword) {
-        hashedPasswordFile = config.sops.secrets.${secretKey}.path;
+        hashedPasswordFile = pwPath;
       })
     ];
 

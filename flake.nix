@@ -23,12 +23,10 @@
           nixos-wsl.nixosModules.default
           sops-nix.nixosModules.default
           home-manager.nixosModules.default
+
           ./modules/core
-
           ./hosts/wsl
-
-          ./modules/hm/bind.nix
-          ./modules/hm/git.nix
+          ./modules/hm
         ];
       };
     };

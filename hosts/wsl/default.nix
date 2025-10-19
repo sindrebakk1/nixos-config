@@ -2,10 +2,12 @@
 {
   networking.hostName = "wsl";
 
-  profile.username = "sindreb";
-  profile.userAuth = {
-    disablePassword = true;
-    sudoWheelNeedsPassword = false;
+  profile = {
+    username = "sindreb";
+    userAuth = {
+      disablePassword = true;
+      sudoWheelNeedsPassword = false;
+    };
   };
   
   wsl = {

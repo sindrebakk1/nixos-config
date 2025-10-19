@@ -1,15 +1,15 @@
-# modules/hm/git.nix
-{ config, ... }:
+{ lib, config, ... }:
 let
   u          = config.profile.username;
-  secretName = "services/github/token";
-  tokenPath  = config.sops.secrets.${secretName}.path;
-in {
-  sops.secrets.${secretName} = {
+  cfg        = config.profile.homeManager.git;
+  tokenKey   = cfg.secretKeys.githubToken;
+  tokenPath  = config.sops.secrets.${tokenKey}.path;
+in
+lib.mkIf cfg.enable {
+  sops.secrets.${tokenKey} = lib.mkIf cfg.enableGitHubCredentials {
     owner = u;
     group = "root";
     mode  = "0400";
-    # sopsFile omitted -> uses sops.defaultSopsFile from your sops.nix
   };
 
   home-manager.users.${u}.programs.git = {
@@ -19,7 +19,7 @@ in {
     extraConfig = {
       init.defaultBranch = "main";
       pull.rebase = true;
-      credential."https://github.com" = {
+      credential."https://github.com" = lib.mkIf cfg.enableGitHubCredentials {
         username = "sindrebakk1";
         helper = "!f() { echo password=$(cat ${tokenPath}); }; f";
       };
