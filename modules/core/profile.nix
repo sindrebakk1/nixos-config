@@ -10,7 +10,7 @@ in
       description = "Primary user (required).";
       example = "sindreb";
     };
-    
+
     uid = mkOption {
       type = types.int;
       default = 1000;
@@ -86,7 +86,6 @@ in
       };
       shell = {
         enable = (mkEnableOption "Enable shell HM module") // { default = true; };
-        transientPrompt = (mkEnableOption "Enable transient prompt") // { default = true; };
         starship = {
           enable =  (mkEnableOption "Enable starship prompt") // { default = true; };
         };

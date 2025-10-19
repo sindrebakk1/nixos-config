@@ -29,6 +29,18 @@
           ./modules/hm
         ];
       };
+      home-server = nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = { inherit inputs; };
+        modules = [
+          sops-nix.nixosModules.default
+          home-manager.nixosModules.default
+
+          ./modules/core
+          ./hosts/home-server
+          ./modules/hm
+        ];
+      };
     };
   };
 }
