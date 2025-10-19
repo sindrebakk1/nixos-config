@@ -17,6 +17,14 @@ in
       description = "User ID";
     };
 
+    extraGroups = mkOption {
+      type = types.listOf types.str;
+      default = [ "wheel" ];
+      example = [ "wheel" ];
+      description = "Additional groups for the primary user.";
+      apply = lib.unique;
+    };
+
     userAuth = {
       disablePassword = mkEnableOption "Disable password for the profile user. (for WSL)";
       sopsFile = mkOption {

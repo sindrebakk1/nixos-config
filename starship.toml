@@ -4,7 +4,7 @@ command_timeout = 1000
 format = """$username${custom.at}$hostname$all$fill$cmd_duration $time$line_break$character"""
 
 [character]
-success_symbol = "[\\$](bold green)"
+success_symbol = "[\\$](bold yellow)"
 error_symbol   = "[\\$](bold red)"
 vicmd_symbol   = "[V](bold yellow)"
 

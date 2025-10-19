@@ -18,7 +18,7 @@ in
     users.users.${u} = lib.mkMerge [
       {
         isNormalUser = true;
-        extraGroups  = [ "wheel" ];
+        extraGroups  = config.profile.extraGroups;
         uid          = config.profile.uid;
       }
 
