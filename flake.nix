@@ -20,16 +20,12 @@
         inherit system;
         specialArgs = { inherit inputs; };
         modules = [
-          ./modules/core/nix.nix
-          ./modules/core/profile.nix
-          ./hosts/wsl
-
           nixos-wsl.nixosModules.default
           sops-nix.nixosModules.default
           home-manager.nixosModules.default
+          ./modules/core
 
-          ./modules/core/sops.nix
-          ./modules/core/account.nix
+          ./hosts/wsl
 
           ./modules/hm/bind.nix
           ./modules/hm/git.nix

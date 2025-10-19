@@ -4,7 +4,7 @@
 
   profile.username = "sindreb";
   profile.userAuth = {
-    enablePassword = false;
+    disablePassword = true;
     sudoWheelNeedsPassword = false;
   };
   

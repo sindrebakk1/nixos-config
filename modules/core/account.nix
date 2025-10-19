@@ -6,21 +6,31 @@ let
 in
 {
   config = {
-    sops.secrets.${secretKey} = lib.mkIf cfg.enablePassword {
-      sopsFile = cfg.sopsFile or config.sops.defaultSopsFile;
-      mode  = "0400";
-      owner = u;
-      group = "root";
+    users.mutableUsers = false;
+    users.allowNoPasswordLogin = lib.mkForce cfg.disablePassword;
+
+    sops.secrets.${secretKey} = lib.mkIf (!cfg.disablePassword) {
+      neededForUsers = true;
     };
 
-    users.users.${u} = {
-      isNormalUser = true;
-      extraGroups  = [ "wheel" ];
-      uid          = config.profile.uid;
-      hashedPasswordFile = lib.mkIf cfg.enablePassword
-        config.sops.secrets.${secretKey}.path;
-    };
+    users.users.${u} = lib.mkMerge [
+      {
+        isNormalUser = true;
+        extraGroups  = [ "wheel" ];
+        uid          = config.profile.uid;
+      }
 
-    security.sudo.wheelNeedsPassword = cfg.sudoWheelNeedsPassword;
+      (lib.mkIf cfg.disablePassword {
+        hashedPassword = lib.mkForce "!";
+        hashedPasswordFile = lib.mkForce null;
+      })
+
+      (lib.mkIf (!cfg.disablePassword) {
+        hashedPasswordFile = config.sops.secrets.${secretKey}.path;
+      })
+    ];
+
+    security.sudo.wheelNeedsPassword =
+      if cfg.disablePassword then lib.mkForce false else cfg.sudoWheelNeedsPassword;
   };
 }
