@@ -18,10 +18,11 @@ style_root = "bold red"
 command = "printf @"
 when = "true"
 format = "[$output]($style)"
-style = "bright-black"
+style = "bold dimmed green"
 
 [hostname]
-ssh_symbol = " "
+ssh_symbol = " "
+format = '[$hostname$ssh_symbol]($style) in '
 ssh_only = false
 style = "bold blue"
 
