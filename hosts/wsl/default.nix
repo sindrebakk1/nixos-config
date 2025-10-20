@@ -40,7 +40,12 @@
   fileSystems."/home/sindreb" = {
     device = "/mnt/d/wsl-home/sindreb";
     fsType = "none";
-    options = [ "bind" "x-systemd.requires=mnt-d.mount" "x-systemd.after=mnt-d.mount" ];
+    options = [
+      "bind"
+      "metadata"
+      "x-systemd.requires=mnt-d.mount"
+      "x-systemd.after=mnt-d.mount"
+    ];
   };
 
   system.stateVersion = "25.05";
