@@ -99,6 +99,10 @@
           publicKey = "sUxraWa0lCqhwJAnfq920ZFt12CFTBCzShzuxN0h/FM=";
           allowedIPs = [ "10.100.0.13/32" ];
         }
+        {
+          publicKey = "PsEXLh5qcb+sSJFn021HZ/0CcJW2kIxwnYQUKFvwhkU=";
+          allowedIPs = [ "10.100.0.15/32" ];
+        }
       ];
     };
   };
