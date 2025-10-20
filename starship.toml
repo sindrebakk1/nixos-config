@@ -77,6 +77,9 @@ read_only = " 󰌾"
 [docker_context]
 symbol = " "
 
+[dotnet]
+format = "[$symbol(🎯 $tfm )]($style)"
+
 [elixir]
 symbol = " "
 
