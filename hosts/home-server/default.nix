@@ -78,7 +78,7 @@
 
     nat = {
       enable = true;
-      externalInterface = "no-osl-wg-001";
+      externalInterface = "eth0";
       internalInterfaces = [ "wg0" ];
     };
 
@@ -100,10 +100,6 @@
           allowedIPs = [ "10.100.0.13/32" ];
         }
       ];
-    };
-
-    wg-quick.interfaces.no-osl-wg-001 = {
-      configFile = "/etc/wireguard/no-osl-wg-001.conf";
     };
   };
 
@@ -150,7 +146,7 @@
     cloudflare-dyndns = {
       enable = true;
       apiTokenFile = "/etc/cloudflare-ddns/token";
-      domains = [ "vpn.sindrebakken.dev" "plex.sindrebakken.dev" ];
+      domains = [ "home.sindrebakken.dev" ];
       ipv4 = true;
       ipv6 = false;
       proxied = false;
