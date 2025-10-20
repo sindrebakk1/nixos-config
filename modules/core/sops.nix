@@ -2,9 +2,6 @@
 let
   keyDir  = "/var/lib/sops-nix";
   keyFile = "${keyDir}/keys.txt";
-
-  u = config.profile.username;
-  userKeyPath = "/home/${u}/.config/sops/age/keys.txt";
 in
 {
   sops = {
@@ -30,20 +27,6 @@ in
       chmod 600 "${keyFile}"
       echo "[sops-nix] System public key:"
       ${pkgs.age}/bin/age-keygen -y "${keyFile}" || true
-    fi
-  '';
-
-  system.activationScripts.sopsUserKey.text = ''
-    set -euo pipefail
-    if [ -n "${u}" ] && [ ! -f "${userKeyPath}" ]; then
-      echo "[sops-nix] Generating user age key at ${userKeyPath}"
-      install -m 0700 -d "$(dirname ${userKeyPath})"
-      umask 077
-      ${pkgs.age}/bin/age-keygen -o "${userKeyPath}"
-      chown ${u}:users "${userKeyPath}"
-      chmod 600 "${userKeyPath}"
-      echo "[sops-nix] User public key:"
-      ${pkgs.age}/bin/age-keygen -y "${userKeyPath}" || true
     fi
   '';
 }

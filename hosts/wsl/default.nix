@@ -32,21 +32,5 @@
     };
   };
 
-  systemd.tmpfiles.rules = [
-    "d /mnt/d/wsl-home 0755 root root -"
-    "d /mnt/d/wsl-home/sindreb 0755 sindreb users -"
-  ];
-
-  fileSystems."/home/sindreb" = {
-    device = "/mnt/d/wsl-home/sindreb";
-    fsType = "none";
-    options = [
-      "bind"
-      "metadata"
-      "x-systemd.requires=mnt-d.mount"
-      "x-systemd.after=mnt-d.mount"
-    ];
-  };
-
   system.stateVersion = "25.05";
 }
