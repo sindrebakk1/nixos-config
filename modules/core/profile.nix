@@ -90,9 +90,9 @@ in
           enable =  (mkEnableOption "Enable starship prompt") // { default = true; };
         };
       };
-      ffmpeg {
-        enable = (mkEnableOption "Enable ffmpeg HM module") // { default = true };
-      }
+      ffmpeg = {
+        enable = (mkEnableOption "Enable ffmpeg HM module") // { default = true; };
+      };
     };
   };
 
