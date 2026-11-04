@@ -48,7 +48,7 @@
           restart: unless-stopped
           devices:
             - /dev/dri:/dev/dri
-          group-add:
+          group_add:
             - "303"
       networks:
         physical:
