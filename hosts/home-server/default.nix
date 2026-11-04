@@ -181,7 +181,7 @@
     cloudflare-dyndns = {
       enable = true;
       apiTokenFile = "/etc/cloudflare-ddns/token";
-      domains = [ "home.sindrebakken.dev" ];
+      domains = [ "home.sindrebakken.dev" "plex.sindrebakken.dev" "jellyfin.sindrebakken.dev" ];
       ipv4 = true;
       ipv6 = false;
       proxied = false;
