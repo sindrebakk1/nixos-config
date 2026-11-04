@@ -194,6 +194,7 @@
       enable = true;
       extraConfig = ''
         plex.sindrebakken.dev {
+          tls internal
           reverse_proxy 192.168.1.20:32400
 
           header {
@@ -212,6 +213,7 @@
         }
 
         jellyfin.sindrebakken.dev {
+          tls internal
           reverse_proxy localhost:8096
 
           header {
