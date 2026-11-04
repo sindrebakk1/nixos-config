@@ -56,7 +56,7 @@
   networking = {
     hostName = "home-server";
     useDHCP = false;
-    macvlans = {
+    macvlans = lib.mkIf (config.profile.services.plex.enable || config.profile.services.jellyfin.enable) {
       macvlan0 = {
         interface = "eth0";
         mode = "bridge";
@@ -69,16 +69,17 @@
         macAddress = "5a:86:e4:48:d3:de";
         ipv4.addresses = [{ address = "192.168.1.10"; prefixLength = 24; }];
       };
+    } // lib.optionalAttrs (config.profile.services.plex.enable || config.profile.services.jellyfin.enable) {
       macvlan0 = {
         ipv4 = {
-          addresses = [{
-            address = "192.168.1.200";
-            prefixLength = 24;
-          }];
-          routes = [
-            { address = "192.168.1.20"; prefixLength = 32; }
-            { address = "192.168.1.21"; prefixLength = 32; }
-          ];
+          addresses = [{ address = "192.168.1.200"; prefixLength = 24; }];
+          routes = []
+            ++ lib.optionals config.profile.services.plex.enable [
+              { address = "192.168.1.20"; prefixLength = 32; }
+            ]
+            ++ lib.optionals config.profile.services.jellyfin.enable [
+              { address = "192.168.1.21"; prefixLength = 32; }
+            ];
         };
       };
     };
@@ -169,11 +170,9 @@
       enable = true;
       settings = {
         listen-address = [ "10.100.0.1" ];
-        address = [
-          "/home.sindrebakken.dev/10.100.0.1"
-          "/plex.sindrebakken.dev/10.100.0.1"
-          "/jellyfin.sindrebakken.dev/10.100.0.1"
-        ];
+        address = [ "/home.sindrebakken.dev/10.100.0.1" ]
+          ++ lib.optionals config.profile.services.plex.enable [ "/plex.sindrebakken.dev/10.100.0.1" ]
+          ++ lib.optionals config.profile.services.jellyfin.enable [ "/jellyfin.sindrebakken.dev/10.100.0.1" ];
         server = [ "1.1.1.1" "8.8.8.8" ];
         domain-needed = true;
         bogus-priv = true;
@@ -203,35 +202,38 @@
         acme_dns cloudflare {env.CF_API_TOKEN}
       '';
       extraConfig = ''
-        plex.sindrebakken.dev {
-          @not_vpn not remote_ip 10.100.0.0/24
-          respond @not_vpn 403
+        ${lib.optionalString config.profile.services.plex.enable ''
+          plex.sindrebakken.dev {
+            @not_vpn not remote_ip 10.100.0.0/24
+            respond @not_vpn 403
 
-          reverse_proxy 192.168.1.20:32400
+            reverse_proxy 192.168.1.20:32400
 
-          header {
-            X-Content-Type-Options "nosniff"
-            X-Frame-Options "DENY"
-            Referrer-Policy "no-referrer"
-            Content-Security-Policy "default-src 'self' https://assets.plex.tv https://plex.tv https://plex.direct; \
-              script-src 'self' 'unsafe-inline' 'unsafe-eval'; \
-              style-src 'self' 'unsafe-inline'; \
-              img-src 'self' data: blob: https://assets.plex.tv https://plex.tv; \
-              connect-src 'self' wss://plex.direct https://plex.tv; \
-              frame-src 'self'; \
-              font-src 'self' data:;"
+            header {
+              X-Content-Type-Options "nosniff"
+              X-Frame-Options "DENY"
+              Referrer-Policy "no-referrer"
+              Content-Security-Policy "default-src 'self' https://assets.plex.tv https://plex.tv https://plex.direct; \
+                script-src 'self' 'unsafe-inline' 'unsafe-eval'; \
+                style-src 'self' 'unsafe-inline'; \
+                img-src 'self' data: blob: https://assets.plex.tv https://plex.tv; \
+                connect-src 'self' wss://plex.direct https://plex.tv; \
+                frame-src 'self'; \
+                font-src 'self' data:;"
+            }
           }
-        }
+        ''}
+        ${lib.optionalString config.profile.services.jellyfin.enable ''
+          jellyfin.sindrebakken.dev {
+            reverse_proxy 192.168.1.21:8096
 
-        jellyfin.sindrebakken.dev {
-          reverse_proxy 192.168.1.21:8096
-
-          header {
-            X-Content-Type-Options "nosniff"
-            X-Frame-Options "SAMEORIGIN"
-            Referrer-Policy "no-referrer"
+            header {
+              X-Content-Type-Options "nosniff"
+              X-Frame-Options "SAMEORIGIN"
+              Referrer-Policy "no-referrer"
+            }
           }
-        }
+        ''}
       '';
     };
 
