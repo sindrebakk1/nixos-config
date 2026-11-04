@@ -39,14 +39,23 @@
         jellyfin:
           image: jellyfin/jellyfin:latest
           container_name: jellyfin
-          ports:
-            - "8096:8096"
-            - "8920:8920"
+          networks:
+            macvlan_net:
+              ipv4_address: 192.168.1.21
           volumes:
             - /mnt/shared/jellyfin/config:/config
             - /mnt/shared/jellyfin/cache:/cache
             - /mnt/shared/media:/media:ro
           restart: unless-stopped
+      networks:
+        macvlan_net:
+          driver: macvlan
+          driver_opts:
+            parent: eth0
+          ipam:
+            config:
+              - subnet: 192.168.1.0/24
+                gateway: 192.168.1.1
     '';
   };
 
@@ -72,10 +81,10 @@
             address = "192.168.1.200";
             prefixLength = 24;
           }];
-          routes = [{
-            address = "192.168.1.20";
-            prefixLength = 32;
-          }];
+          routes = [
+            { address = "192.168.1.20"; prefixLength = 32; }
+            { address = "192.168.1.21"; prefixLength = 32; }
+          ];
         };
       };
     };
@@ -89,8 +98,7 @@
     firewall = {
       enable = true;
       allowedTCPPorts = [ 80 139 443 445 ]
-        ++ lib.optionals config.profile.services.plex.enable [ 32400 32469 3005 8324 ]
-        ++ lib.optionals config.profile.services.jellyfin.enable [ 8096 8920 ];
+        ++ lib.optionals config.profile.services.plex.enable [ 32400 32469 3005 8324 ];
       allowedUDPPorts = [ 53 137 138 5353 51820 ]
         ++ lib.optionals config.profile.services.plex.enable [ 1900 32410 32412 32413 32414 ];
       interfaces.wg0 = {
@@ -222,7 +230,7 @@
         }
 
         jellyfin.sindrebakken.dev {
-          reverse_proxy localhost:8096
+          reverse_proxy 192.168.1.21:8096
 
           header {
             X-Content-Type-Options "nosniff"
