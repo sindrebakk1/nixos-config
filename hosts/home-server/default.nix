@@ -192,13 +192,19 @@
 
     caddy = {
       enable = true;
+      package = pkgs.caddy.withPlugins {
+        plugins = [ "github.com/caddy-dns/cloudflare@v0.2.4" ];
+        hash = "sha256-EXZTsf9KrIAi9gHsBHrYQ7oIQiYmLj6sYuQP5QihPcA=";
+      };
       extraConfig = ''
+        {
+          acme_dns cloudflare {env.CF_API_TOKEN}
+        }
+
         plex.sindrebakken.dev {
-          tls internal
           reverse_proxy 192.168.1.20:32400
 
           header {
-            Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
             X-Content-Type-Options "nosniff"
             X-Frame-Options "DENY"
             Referrer-Policy "no-referrer"
@@ -213,11 +219,9 @@
         }
 
         jellyfin.sindrebakken.dev {
-          tls internal
           reverse_proxy localhost:8096
 
           header {
-            Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
             X-Content-Type-Options "nosniff"
             X-Frame-Options "SAMEORIGIN"
             Referrer-Policy "no-referrer"
@@ -337,7 +341,16 @@
     "d /mnt/shared/jellyfin/cache 0755 1000 1000 - -"
   ];
 
+  systemd.services.caddy.serviceConfig.EnvironmentFile = "/etc/caddy/cloudflare-env";
+
   system.activationScripts = lib.mkMerge [
+    {
+      caddy-cloudflare-env = ''
+        mkdir -p /etc/caddy
+        echo "CF_API_TOKEN=$(cat /etc/cloudflare-ddns/token)" > /etc/caddy/cloudflare-env
+        chmod 600 /etc/caddy/cloudflare-env
+      '';
+    }
     (lib.mkIf config.profile.services.plex.enable {
       plex-update = ''
         if /run/current-system/sw/bin/systemctl is-active --quiet plex-docker-compose; then
