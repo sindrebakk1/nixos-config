@@ -172,6 +172,7 @@
           "/plex.sindrebakken.dev/10.100.0.1"
           "/jellyfin.sindrebakken.dev/10.100.0.1"
         ];
+        server = [ "1.1.1.1" "8.8.8.8" ];
         domain-needed = true;
         bogus-priv = true;
       };
