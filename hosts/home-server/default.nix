@@ -9,7 +9,6 @@
   profile = {
     username = "sindreb";
     extraGroups = [ "networkmanager" "docker" "wheel" ];
-    services.plex.enable = true;
     services.jellyfin.enable = true;
   };
 
