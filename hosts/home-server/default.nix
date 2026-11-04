@@ -40,7 +40,7 @@
           image: jellyfin/jellyfin:latest
           container_name: jellyfin
           networks:
-            macvlan_net:
+            physical:
               ipv4_address: 192.168.1.21
           volumes:
             - /mnt/shared/jellyfin/config:/config
@@ -48,14 +48,8 @@
             - /mnt/shared/media:/media:ro
           restart: unless-stopped
       networks:
-        macvlan_net:
-          driver: macvlan
-          driver_opts:
-            parent: eth0
-          ipam:
-            config:
-              - subnet: 192.168.1.0/24
-                gateway: 192.168.1.1
+        physical:
+          external: true
     '';
   };
 
