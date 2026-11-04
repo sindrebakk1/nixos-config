@@ -1,7 +1,7 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports = [ ./hardware.nix ];
@@ -9,6 +9,8 @@
   profile = {
     username = "sindreb";
     extraGroups = [ "networkmanager" "docker" "wheel" ];
+    services.plex.enable = true;
+    services.jellyfin.enable = true;
   };
 
   boot.loader = {
@@ -29,6 +31,23 @@
     linkConfig = {
       Name = "eth0";
     };
+  };
+
+  environment.etc = lib.mkIf config.profile.services.jellyfin.enable {
+    "jellyfin/docker-compose.yaml".text = ''
+      services:
+        jellyfin:
+          image: jellyfin/jellyfin:latest
+          container_name: jellyfin
+          ports:
+            - "8096:8096"
+            - "8920:8920"
+          volumes:
+            - /mnt/shared/jellyfin/config:/config
+            - /mnt/shared/jellyfin/cache:/cache
+            - /mnt/shared/media:/media:ro
+          restart: unless-stopped
+    '';
   };
 
   networking = {
@@ -69,8 +88,11 @@
 
     firewall = {
       enable = true;
-      allowedTCPPorts = [ 80 139 443 445 32400 32469 3005 8324 ];
-      allowedUDPPorts = [ 53 137 138 1900 5353 32410 32412 32413 32414 51820 ];
+      allowedTCPPorts = [ 80 139 443 445 ]
+        ++ lib.optionals config.profile.services.plex.enable [ 32400 32469 3005 8324 ]
+        ++ lib.optionals config.profile.services.jellyfin.enable [ 8096 8920 ];
+      allowedUDPPorts = [ 53 137 138 5353 51820 ]
+        ++ lib.optionals config.profile.services.plex.enable [ 1900 32410 32412 32413 32414 ];
       interfaces.wg0 = {
         allowedTCPPorts = [ 22 ];
       };
@@ -230,40 +252,26 @@
 
   virtualisation.docker.enable = true;
 
-  systemd.services = {
-    "wg-quick-wg0".wantedBy = [ "multi-user.target" ];
+  systemd.services = lib.mkMerge [
+    {
+      "wg-quick-wg0".wantedBy = [ "multi-user.target" ];
 
-    "plex-docker-compose" = {
-      description = "Plex Media Server Docker Compose";
-      after = [ "docker.service" "network-online.target" ];
-      wants = [ "network-online.target" ];
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        WorkingDirectory = "/etc/plex";
-        ExecStart = "${pkgs.docker-compose}/bin/docker-compose up -d";
-        ExecStop = "${pkgs.docker-compose}/bin/docker-compose down";
-        TimeoutStartSec = "0";
+      "qbittorrent-docker-compose" = {
+        description = "QbitTorrent Docker Compose";
+        after = [ "docker.service" "network-online.target" ];
+        wants = [ "network-online.target" ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          WorkingDirectory = "/etc/qbittorrent";
+          ExecStart = "${pkgs.docker-compose}/bin/docker-compose up -d";
+          ExecStop = "${pkgs.docker-compose}/bin/docker-compose down";
+          TimeoutStartSec = "0";
+        };
+        wantedBy = [ "multi-user.target" ];
       };
-      wantedBy = [ "multi-user.target" ];
-    };
 
-    "qbittorrent-docker-compose" = {
-      description = "QbitTorrent Docker Compose";
-      after = [ "docker.service" "network-online.target" ];
-      wants = [ "network-online.target" ];
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        WorkingDirectory = "/etc/qbittorrent";
-        ExecStart = "${pkgs.docker-compose}/bin/docker-compose up -d";
-        ExecStop = "${pkgs.docker-compose}/bin/docker-compose down";
-        TimeoutStartSec = "0";
-      };
-      wantedBy = [ "multi-user.target" ];
-    };
-
-    "acl-setup" = {
+      "acl-setup" = {
       description = "Apply ACLs to /mnt/shared/media for sambashare";
       after = [ "local-fs.target" "systemd-tmpfiles-setup.service" ];
       wants = [ "local-fs.target" ];
@@ -278,13 +286,71 @@
       };
       wantedBy = [ "multi-user.target" ];
     };
-  };
+    }
+    (lib.mkIf config.profile.services.plex.enable {
+      "plex-docker-compose" = {
+        description = "Plex Media Server Docker Compose";
+        after = [ "docker.service" "network-online.target" ];
+        wants = [ "network-online.target" ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          WorkingDirectory = "/etc/plex";
+          ExecStartPre = "${pkgs.docker-compose}/bin/docker-compose pull";
+          ExecStart = "${pkgs.docker-compose}/bin/docker-compose up -d";
+          ExecStop = "${pkgs.docker-compose}/bin/docker-compose down";
+          TimeoutStartSec = "0";
+        };
+        wantedBy = [ "multi-user.target" ];
+      };
+    })
+    (lib.mkIf config.profile.services.jellyfin.enable {
+      "jellyfin-docker-compose" = {
+        description = "Jellyfin Media Server Docker Compose";
+        after = [ "docker.service" "network-online.target" ];
+        wants = [ "network-online.target" ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          WorkingDirectory = "/etc/jellyfin";
+          ExecStartPre = "${pkgs.docker-compose}/bin/docker-compose pull";
+          ExecStart = "${pkgs.docker-compose}/bin/docker-compose up -d";
+          ExecStop = "${pkgs.docker-compose}/bin/docker-compose down";
+          TimeoutStartSec = "0";
+        };
+        wantedBy = [ "multi-user.target" ];
+      };
+    })
+  ];
 
   systemd.tmpfiles.rules = [
-    "d /mnt/shared/plex/config 0755 1000 1000 - -"
-    "d /mnt/shared/plex/transcode 0755 1000 1000 - -"
     "d /mnt/shared/qbittorrent/appdata 0755 1000 1000 - -"
     "d /mnt/shared/media 2775 1000 1000 - -"
+  ]
+  ++ lib.optionals config.profile.services.plex.enable [
+    "d /mnt/shared/plex/config 0755 1000 1000 - -"
+    "d /mnt/shared/plex/transcode 0755 1000 1000 - -"
+  ]
+  ++ lib.optionals config.profile.services.jellyfin.enable [
+    "d /mnt/shared/jellyfin/config 0755 1000 1000 - -"
+    "d /mnt/shared/jellyfin/cache 0755 1000 1000 - -"
+  ];
+
+  system.activationScripts = lib.mkMerge [
+    (lib.mkIf config.profile.services.plex.enable {
+      plex-update = ''
+        if /run/current-system/sw/bin/systemctl is-active --quiet plex-docker-compose; then
+          /run/current-system/sw/bin/systemctl restart plex-docker-compose || true
+        fi
+      '';
+    })
+    (lib.mkIf config.profile.services.jellyfin.enable {
+      jellyfin-update = ''
+        if /run/current-system/sw/bin/systemctl is-active --quiet jellyfin-docker-compose; then
+          /run/current-system/sw/bin/systemctl restart jellyfin-docker-compose || true
+        fi
+      '';
+    })
   ];
 
   system.stateVersion = "25.05";

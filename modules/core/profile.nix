@@ -94,6 +94,11 @@ in
         enable = (mkEnableOption "Enable ffmpeg HM module") // { default = true; };
       };
     };
+
+    services = {
+      plex.enable = mkEnableOption "Plex Media Server Docker Compose service";
+      jellyfin.enable = mkEnableOption "Jellyfin Media Server Docker Compose service";
+    };
   };
 
   config.assertions = [
