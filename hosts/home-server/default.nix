@@ -256,21 +256,6 @@
     {
       "wg-quick-wg0".wantedBy = [ "multi-user.target" ];
 
-      "qbittorrent-docker-compose" = {
-        description = "QbitTorrent Docker Compose";
-        after = [ "docker.service" "network-online.target" ];
-        wants = [ "network-online.target" ];
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-          WorkingDirectory = "/etc/qbittorrent";
-          ExecStart = "${pkgs.docker-compose}/bin/docker-compose up -d";
-          ExecStop = "${pkgs.docker-compose}/bin/docker-compose down";
-          TimeoutStartSec = "0";
-        };
-        wantedBy = [ "multi-user.target" ];
-      };
-
       "acl-setup" = {
       description = "Apply ACLs to /mnt/shared/media for sambashare";
       after = [ "local-fs.target" "systemd-tmpfiles-setup.service" ];
@@ -324,7 +309,6 @@
   ];
 
   systemd.tmpfiles.rules = [
-    "d /mnt/shared/qbittorrent/appdata 0755 1000 1000 - -"
     "d /mnt/shared/media 2775 1000 1000 - -"
   ]
   ++ lib.optionals config.profile.services.plex.enable [
