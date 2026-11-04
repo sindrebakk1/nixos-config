@@ -201,6 +201,7 @@
       '';
       extraConfig = ''
         plex.sindrebakken.dev {
+          bind 10.100.0.1
           reverse_proxy 192.168.1.20:32400
 
           header {
@@ -218,6 +219,7 @@
         }
 
         jellyfin.sindrebakken.dev {
+          bind 10.100.0.1
           reverse_proxy localhost:8096
 
           header {
