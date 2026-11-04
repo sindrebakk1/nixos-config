@@ -276,6 +276,7 @@
   systemd.services = lib.mkMerge [
     {
       "wg-quick-wg0".wantedBy = [ "multi-user.target" ];
+      caddy.serviceConfig.EnvironmentFile = "/etc/caddy/cloudflare-env";
 
       "acl-setup" = {
       description = "Apply ACLs to /mnt/shared/media for sambashare";
@@ -340,8 +341,6 @@
     "d /mnt/shared/jellyfin/config 0755 1000 1000 - -"
     "d /mnt/shared/jellyfin/cache 0755 1000 1000 - -"
   ];
-
-  systemd.services.caddy.serviceConfig.EnvironmentFile = "/etc/caddy/cloudflare-env";
 
   system.activationScripts = lib.mkMerge [
     {
