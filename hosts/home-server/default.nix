@@ -46,6 +46,10 @@
             - /mnt/shared/jellyfin/cache:/cache
             - /mnt/shared/media:/media:ro
           restart: unless-stopped
+          devices:
+            - /dev/dri:/dev/dri
+          group-add:
+            - "303"
       networks:
         physical:
           external: true
