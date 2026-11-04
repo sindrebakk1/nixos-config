@@ -220,7 +220,6 @@
         }
 
         jellyfin.sindrebakken.dev {
-          bind 10.100.0.1
           reverse_proxy localhost:8096
 
           header {
