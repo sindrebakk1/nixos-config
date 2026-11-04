@@ -202,7 +202,9 @@
       '';
       extraConfig = ''
         plex.sindrebakken.dev {
-          bind 10.100.0.1
+          @not_vpn not remote_ip 10.100.0.0/24
+          respond @not_vpn 403
+
           reverse_proxy 192.168.1.20:32400
 
           header {
