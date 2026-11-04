@@ -167,7 +167,11 @@
       enable = true;
       settings = {
         listen-address = [ "10.100.0.1" ];
-        address = [ "/home.sindrebakken.dev/10.100.0.1" ];
+        address = [
+          "/home.sindrebakken.dev/10.100.0.1"
+          "/plex.sindrebakken.dev/10.100.0.1"
+          "/jellyfin.sindrebakken.dev/10.100.0.1"
+        ];
         domain-needed = true;
         bogus-priv = true;
       };
@@ -204,6 +208,17 @@
               connect-src 'self' wss://plex.direct https://plex.tv; \
               frame-src 'self'; \
               font-src 'self' data:;"
+          }
+        }
+
+        jellyfin.sindrebakken.dev {
+          reverse_proxy localhost:8096
+
+          header {
+            Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+            X-Content-Type-Options "nosniff"
+            X-Frame-Options "SAMEORIGIN"
+            Referrer-Policy "no-referrer"
           }
         }
       '';
