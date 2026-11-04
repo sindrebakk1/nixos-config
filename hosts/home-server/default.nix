@@ -196,11 +196,10 @@
         plugins = [ "github.com/caddy-dns/cloudflare@v0.2.4" ];
         hash = "sha256-2HHDNibej1EjKGJKtTOfYJorRLG5mzicKuuutKzEpC8=";
       };
+      globalConfig = ''
+        acme_dns cloudflare {env.CF_API_TOKEN}
+      '';
       extraConfig = ''
-        {
-          acme_dns cloudflare {env.CF_API_TOKEN}
-        }
-
         plex.sindrebakken.dev {
           reverse_proxy 192.168.1.20:32400
 
